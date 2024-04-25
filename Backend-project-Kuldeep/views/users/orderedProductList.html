@@ -1,0 +1,25 @@
+<section>
+  <div class="container mt-3">
+    <h3>Order Lists</h3>
+      <div class="row me-1">
+        {{#each placedOrderList}}
+        <div class="col-md-3 col-sm-6 " style="margin-right: 5px;">
+          <div class="card text-center " style="width: 13rem; height:25rem;">
+           
+            <img src="/images/{{this.placedProducts._id}}.jpg" class="mx-auto" width="100px" height="120px" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{this.placedProducts.name}}</h5>
+              <p class="card-text">{{this.placedProducts.category}}</p>
+              <p class="card-text"><b>Rs {{this.placedProducts.price}}</b></p>
+               <p class="card-text"><b>Quantity {{this.index}}</b></p>
+                <p class="card-text"><b>Status: Placed</b></p>
+              
+            </div>
+          
+          </div>
+        </div>
+        {{/each}}
+      </div>
+  
+  </div>
+</section>

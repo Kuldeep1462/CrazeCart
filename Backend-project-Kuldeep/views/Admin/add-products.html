@@ -1,0 +1,39 @@
+<section>
+<div class="container">
+    <a href="Admin/add-products" class="btn btn-dark  mt-4 mb-4">Add products</a>
+    <table class="table" id="adminTables">
+  <thead>
+    <tr>
+      <th scope="col">Sl no</th>
+      <th scope="col">Name</th>
+      <th scope="col">category</th>
+      <th scope="col">description</th>
+      <th scope="col">Price</th>
+      <th scope="col">Images</th>
+      <th scope="col">Changes</th>
+      <th scope="col">changes</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {{#each product}}
+    <tr>
+      <th scope="row">1</th>
+      <td>{{name}}</td> 
+      <td>{{category}}</td>
+      <td>{{description}}</td>
+      <td>{{price}}</td>
+      <td><img style="width:50px; height: 50px;" src="/images/{{_id}}.jpg"></td>
+      <td><a href="/Admin/edit-Product/{{_id}}" class="btn btn-primary">Edit</a></td>
+      <td><a href="/Admin/delete-Product/{{_id}}" class="btn btn-danger" onclick=" return confirm('Are you sure ,you want to delete {{name}}?')">Delete</a></td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+</div>
+</section>
+<script>
+  $(document).ready( function () {
+    $('#adminTables').DataTable();
+} );
+</script>

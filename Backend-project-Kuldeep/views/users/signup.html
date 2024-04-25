@@ -1,0 +1,95 @@
+
+    <div class="containerone">
+      {{!-- <div class="forms-container"> --}}
+        <div class="signin-signup">
+          <form action="/signup" class="sign-in-form" method="post" name="submit" onsubmit="return validate()">
+            <h2 class="title">Sign up</h2>
+            <div class="input-field">
+              <i class="fas fa-user"></i>
+              <input type="text" name="name" id="name-reg" placeholder="Username" />
+            </div>
+             <div class="input-field">
+              <i class="fas fa-phone"></i>
+              <input type="text" name="phone" id="phone-reg" placeholder="phone number" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-envelope"></i>
+              <input type="email"name="email"  id="email-reg" placeholder="Email" />
+            </div>
+            <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" name="password" id="password-reg" placeholder="Password" />
+            </div>
+             <div class="input-field">
+              <i class="fas fa-lock"></i>
+              <input type="password" name="passwordconfirm" id="password-conf-reg" placeholder="confirm Password" />
+            </div>
+            <input type="submit" value="SIGN UP" class="btn solid" />
+             <p style="color: red; margin-top: 20px;" id="error-message"></p>
+             <p style="color:green; margin-top:20px;">{{messageEmail}}</p>
+
+          </form>
+          </div>
+
+      <div class="panels-container">
+        <div class="panel left-panel">
+          <div class="content">
+            <h3>one of us ?</h3>
+            <p>
+              "Welcome to our ecommerce website! Please sign in to 
+              access your account and start shopping."
+            </p>
+            <a href="/login"><button class="btn transparent" id="sign-up-btn">
+              log in
+            </button></a>
+    </div>
+<script>
+  function validate() {
+    var name = document.getElementById("name-reg").value;
+    var email = document.getElementById("email-reg").value;
+    var phone = document.getElementById("phone-reg").value;
+    var password = document.getElementById("password-reg").value;
+    var cpassword = document.getElementById("password-conf-reg").value;
+
+    var reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+   var nameerror = /^[A-Za-z\s]+$/;
+    var phoneerror = /^[0-9]{10}$/;
+    var passworderror = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
+    var error = document.getElementById("error-message");
+
+    if (name === "") {
+      error.innerHTML = "Please enter your name";
+      return false;
+    }
+    if (nameerror.test(name) === false) {
+      error.innerHTML = "Invalid name";
+      return false;
+    }
+    if (name.length < 5) {
+      error.innerHTML = "Name should contain at least 5 characters";
+      return false;
+    }
+    if (email === "") {
+      error.innerHTML = "Please enter your email id";
+      return false;
+    }
+    if (reg.test(email) === false) {
+      error.innerHTML = "Invalid email id";
+      return false;
+    }
+    if (phoneerror.test(phone) === false) {
+      error.innerHTML = "Phone number should contain 10 digits";
+      return false;
+    }
+    if (passworderror.test(password) === false) {
+      error.innerHTML =
+        "Password must contain 8 characters, at least one special character, and at least one uppercase letter";
+      return false;
+    }
+    if (password !== cpassword) {
+      error.innerHTML = "Both passwords do not match";
+      return false;
+    }
+    return true;
+  }
+</script>
