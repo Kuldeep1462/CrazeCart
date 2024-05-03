@@ -1,11 +1,11 @@
-const { connectToDB } = require("../config/connection");
+const { setupServer } = require("../config/connection");
 const collection = require("./collection");
 const { ObjectId } = require('mongodb');
 
 module.exports = {
   addProducts: async (product, callBack) => {
     try {
-      const database = await connectToDB();
+      const database = await setupServer();
       await database.command({ ping: 1 });
       const collection = database.collection('Product'); 
       const result = await collection.insertOne(product);
@@ -17,7 +17,7 @@ module.exports = {
 
   listAdminProducts: () => { 
     return new Promise(async (resolve, reject) => {
-      const database = await connectToDB();
+      const database = await setupServer();
       const adminProducts = await database.collection(collection.COLLECTION_NAME).find().toArray();
       resolve(adminProducts);
     });
@@ -26,7 +26,7 @@ module.exports = {
   deleteProducts: (prodId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const database = await connectToDB();
+        const database = await setupServer();
         const collect = database.collection(collection.COLLECTION_NAME);
         const response = await collect.deleteOne({ _id: new ObjectId(prodId) });
         resolve(response);
@@ -39,7 +39,7 @@ module.exports = {
   editProducts: (prodId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const database = await connectToDB();
+        const database = await setupServer();
         const product = await database.collection(collection.COLLECTION_NAME).findOne({ _id: new ObjectId(prodId) });
         resolve(product);
       } catch (error) {
@@ -51,7 +51,7 @@ module.exports = {
   updateProducts: (prodId, products) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const database = await connectToDB();
+        const database = await setupServer();
         await database.collection(collection.COLLECTION_NAME).updateOne(
           { _id: new ObjectId(prodId) },
           {
@@ -98,7 +98,7 @@ module.exports = {
   getUsers: () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const database = await connectToDB();
+        const database = await setupServer();
         const users = await database.collection('users').find().toArray();
         resolve(users);
       } catch (error) {
@@ -110,7 +110,7 @@ module.exports = {
   getOrders: () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const database = await connectToDB();
+        const database = await setupServer();
         const orderData = await database.collection('placeOrder').aggregate([
           // Your aggregation pipeline stages here...
         ]).toArray();
