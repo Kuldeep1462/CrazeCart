@@ -2,11 +2,11 @@ const { MongoClient } = require('mongodb');
 
 async function connectToDB() {
   const uri = 'mongodb+srv://kuldeep0_0:Kuldeep12@cluster0.qkvgd0d.mongodb.net/shopping';
-  const client = new MongoClient(uri);
   
   try {
+    const client = new MongoClient(uri);
     await client.connect();
-    const database = client.db('shopping');
+    const database = client.db();
     
     return database;
   } catch (error) {
@@ -18,7 +18,3 @@ async function connectToDB() {
 module.exports = {
   connectToDB
 };
-
-
-
-
