@@ -1,4 +1,4 @@
-const { connectToDB } = require("../config/connection");
+const { setupServer } = require("../config/connection");
 const collection = require("./collection");
 const bcrypt = require('bcrypt');
 const { ObjectId } = require("mongodb");
@@ -12,7 +12,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       userSignup.password = await bcrypt.hash(userSignup.password, 10);
       userSignup.passwordconfirm = await bcrypt.hash(userSignup.password, 10);
-      const database = await connectToDB();
+      const database = await setupServer();
       database.collection(collection.userCollection).insertOne(userSignup).then((userData) => resolve(userData.insertedId));
     });
   },
@@ -21,7 +21,7 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       let response = {};
       try {
-        const database = await connectToDB();
+        const database = await setupServer();
         const user = await database.collection(collection.userCollection).findOne({ email: userLogin.email });
 
         if (user) {
@@ -64,7 +64,7 @@ module.exports = {
         product: [prodObj]
       };
 
-      const database = await connectToDB();
+      const database = await setupServer();
       const userCart = await database.collection("newCart").findOne({ user: new ObjectId(userId) });
       if (userCart) {
         let index = userCart.product.findIndex((product) => {
@@ -103,7 +103,7 @@ module.exports = {
   AddToUsercart: (userId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const database = await connectToDB();
+        const database = await setupServer();
         const userCartData = await database.collection("newCart").aggregate([
           {
             $match: { user: new ObjectId(userId) }
@@ -139,7 +139,7 @@ module.exports = {
 
   getCartCount: (userId) => {
     return new Promise(async (resolve, reject) => {
-      const database = await connectToDB();
+      const database = await setupServer();
       let Count = 0;
       const cartCount = await database.collection("newCart").findOne({ user: new ObjectId(userId) });
       if (cartCount != null) {
@@ -158,7 +158,7 @@ module.exports = {
     quantity = parseInt(object.quantity)
 
     return new Promise(async (resolve, reject) => {
-      const database = await connectToDB();
+      const database = await setupServer();
 
       if (count == -1 && quantity == 1) {
         await database.collection("newCart").updateOne({ _id: new ObjectId(object.cart) },
@@ -182,7 +182,7 @@ module.exports = {
 
   remove: (object) => {
     return new Promise(async (resolve, reject) => {
-      const database = await connectToDB();
+      const database = await setupServer();
       await database.collection("newCart").updateOne({ _id: new ObjectId(object.cartId) },
         { $pull: { product: { prodid: new ObjectId(object.productId) } } }
       ).then((response) => resolve(true))
@@ -192,7 +192,7 @@ module.exports = {
   getAmount: (userId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const database = await connectToDB();
+        const database = await setupServer();
         const totalAmount = await database.collection("newCart").aggregate([
           {
             $match: { user: new ObjectId(userId) }
@@ -233,7 +233,7 @@ module.exports = {
   },
   getCartProducts: async (userId) => {
     return new Promise(async (resolve, reject) => {
-      const database = await connectToDB();
+      const database = await setupServer();
       const cart = await database.collection("newCart")
         .findOne({ user: new ObjectId(userId) })
       resolve(cart.product)
@@ -265,7 +265,7 @@ module.exports = {
           totalAmount: amount,
         }
       }
-      const database = await connectToDB();
+      const database = await setupServer();
       await database.collection("placeOrder").insertOne(orderObj)
         .then((response) => {
           database.collection("newCart").deleteOne({ user: new ObjectId(order.userId) })
@@ -276,7 +276,7 @@ module.exports = {
   },
   listProducts: (userId) => {
     return new Promise(async (resolve, reject) => {
-      const database = await connectToDB();
+      const database = await setupServer();
       const placedData = await database.collection("placeOrder")
         .find({ "userDetails.user": new ObjectId(userId) }).toArray()
       resolve(placedData)
@@ -285,7 +285,7 @@ module.exports = {
   },
   getProducts: (prodID) => {
     return new Promise(async (resolve, reject) => {
-      const database = await connectToDB();
+      const database = await setupServer();
       const product = database.collection("product").find({ _id: new ObjectId(prodID) }).toArray()
       resolve(product)
     })
@@ -327,7 +327,7 @@ module.exports = {
 
   changePaymentStatus: (receipt) => {
     return new Promise(async (resolve, reject) => {
-      const database = await connectToDB();
+      const database = await setupServer();
       database.collection("placeOrder").updateOne(
         { _id: new ObjectId(receipt) },
         { $set: { "userDetails.status": "placed" } }
@@ -378,7 +378,7 @@ module.exports = {
 
   findDuplication: (Email) => {
     return new Promise(async (resolve, reject) => {
-      const db = await connectToDB();
+      const db = await setupServer();
       const findEmail = await db.collection("users").findOne({ email: Email });
       resolve(findEmail)
     })
@@ -386,7 +386,7 @@ module.exports = {
 
   searchProducts: async (product) => {
     return new Promise(async (resolve, reject) => {
-      const database = await connectToDB();
+      const database = await setupServer();
       const searchQuery = new RegExp(product.search, 'i');
       const searchResults = await database.collection("Product").find({
         $or: [
@@ -400,7 +400,7 @@ module.exports = {
   },
   getPlacedProducts: (placedId) => {
     return new Promise(async (resolve, reject) => {
-      const database = await connectToDB();
+      const database = await setupServer();
       const placedOrderList = await database.collection('placeOrder').aggregate([
         {
           $match: {
