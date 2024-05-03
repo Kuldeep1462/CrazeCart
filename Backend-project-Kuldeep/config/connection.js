@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 async function connectToDB() {
-  const uri = 'mongodb+srv://kuldeep0_0:Kuldeep12@cluster0.qkvgd0d.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+  const uri = 'mongodb+srv://kuldeep0_0:Kuldeep12@cluster0.qkvgd0d.mongodb.net/shopping';
   const client = new MongoClient(uri);
   
   try {
